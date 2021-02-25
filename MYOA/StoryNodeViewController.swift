@@ -10,6 +10,8 @@ import UIKit
 
 // MARK: - StoryNodeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 
+@available(iOS 13.0, *)
+@available(iOS 13.0, *)
 class StoryNodeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: Properties
@@ -45,11 +47,17 @@ class StoryNodeViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //TODO: Implement to push the next story node.
+        
+        guard let vc = storyboard?.instantiateViewController(identifier: "StoryNodeViewController") as? StoryNodeViewController else {return}
+        
+        vc.storyNode = storyNode.storyNodeForIndex(index: indexPath.row)
+            
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // TODO: Return the number of prompts in the storyNode (The 2 is just a place holder)
-        return 2
+        return storyNode.promptCount()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,7 +65,7 @@ class StoryNodeViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")! 
 
-        cell.textLabel!.text = "Place holder prompt"
+        cell.textLabel!.text = storyNode.promptForIndex(indexPath.row)
         
         return cell
     }
